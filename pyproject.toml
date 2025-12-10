@@ -19,3 +19,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 package-mode = false
+
+[dependency-groups]
+dev = [
+    "pylint (>=4.0.4,<5.0.0)"
+]
