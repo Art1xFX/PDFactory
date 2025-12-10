@@ -117,6 +117,21 @@ django = "*"
 typing-extensions = "*"
 
 [[package]]
+name = "django-unfold"
+version = "0.73.1"
+description = "Modern Django admin theme for seamless interface development"
+optional = false
+python-versions = "<4.0,>=3.10"
+groups = ["main"]
+files = [
+    {file = "django_unfold-0.73.1-py3-none-any.whl", hash = "sha256:7241275b75f0784a28410afa6bb4660f427eb7b62d48726195b35374887f017d"},
+    {file = "django_unfold-0.73.1.tar.gz", hash = "sha256:2c1bbf24d2fc162fe5d0e19b27c1f8287fdd5343b1ffe2b78ee26586ed1a4837"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[[package]]
 name = "isort"
 version = "7.0.0"
 description = "A Python utility / library to sort Python imports."
@@ -254,4 +269,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "637ed440a6d41eb75926a85fdd0d21aec1b30449127bc2676285c5fb76cf75c9"
+content-hash = "59593648acbb108252ba0732a31304548ee7de1e8aeffbab86ef6684c57fad3b"
