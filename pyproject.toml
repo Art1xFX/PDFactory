@@ -22,5 +22,6 @@ package-mode = false
 
 [dependency-groups]
 dev = [
-    "pylint (>=4.0.4,<5.0.0)"
+    "pylint (>=4.0.4,<5.0.0)",
+    "django-stubs (>=5.2.8,<6.0.0)"
 ]
