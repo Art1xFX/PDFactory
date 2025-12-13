@@ -22,7 +22,8 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "pylint (>=4.0.4,<5.0.0)",
     "django-stubs (>=5.2.8,<6.0.0)",
-    "bandit (>=1.9.2,<2.0.0)"
+    "bandit (>=1.9.2,<2.0.0)",
+    "mypy (>=1.19.0,<2.0.0)"
 ]
 
 [tool.poetry]
