@@ -48,3 +48,19 @@ django_settings_module = "main.settings"
 
 [tool.ruff]
 line-length = 120
+
+
+[tool.pylint.main]
+load-plugins = ["pylint_django", "pylint_django.checkers.migrations"]
+django-settings-module = "main.settings"
+ignore-paths = ["src/.*/migrations", "src/media", "src/static"]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+]
