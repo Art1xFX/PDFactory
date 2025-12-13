@@ -2,10 +2,8 @@
 name = "pdfactory"
 version = "0.1.0"
 description = "Open-source service for automated PDF certificate generation from templates with API support."
-authors = [
-    {name = "Artiom Cozlovici",email = "kozakovi4@outlook.com"}
-]
-license = {file = "LICENSE"}
+authors = [{ name = "Artiom Cozlovici", email = "kozakovi4@outlook.com" }]
+license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.14,<4.0"
 dependencies = [
@@ -24,7 +22,7 @@ dev = [
     "pylint (>=4.0.4,<5.0.0)",
     "django-stubs (>=5.2.8,<6.0.0)",
     "bandit (>=1.9.2,<2.0.0)",
-    "mypy (>=1.19.0,<2.0.0)"
+    "mypy (>=1.19.0,<2.0.0)",
 ]
 
 [tool.poetry]
@@ -33,9 +31,7 @@ package-mode = false
 [tool.mypy]
 python_version = "3.12"
 mypy_path = ["src"]
-plugins = [
-  "mypy_django_plugin.main",
-]
+plugins = ["mypy_django_plugin.main"]
 
 [[tool.mypy.overrides]]
 module = ["unfold.*"]

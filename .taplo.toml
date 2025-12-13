@@ -1,0 +1,10 @@
+include = [".taplo.toml", "pyproject.toml"]
+
+[formatting]
+column_width = 120
+
+[[rule]]
+include = ["pyproject.toml"]
+
+[rule.schema]
+path = "https://json.schemastore.org/pyproject.json"
