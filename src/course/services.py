@@ -26,6 +26,6 @@ class CertificateRenderService:
 
         filename = f"{course.id}/{intake.id}/{slugify(certificate.last_name)}_{slugify(certificate.first_name)}.html"
 
-        certificate.file.save(filename, ContentFile(html.encode("utf-8")))
+        certificate.file.save(filename, ContentFile(html.encode("utf-8")), save=False)
 
         return ContentFile(html.encode("utf-8"))
