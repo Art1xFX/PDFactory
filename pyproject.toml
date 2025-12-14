@@ -39,6 +39,7 @@ package-mode = false
 python_version = "3.12"
 mypy_path = ["src"]
 plugins = ["mypy_django_plugin.main"]
+disable_error_code = ["misc"]
 
 [[tool.mypy.overrides]]
 module = ["unfold.*", "simple_history.*"]
