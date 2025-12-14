@@ -1,5 +1,7 @@
 from django.db import models
 
+from cert.models import Template
+
 
 class Course(models.Model):
     title = models.CharField(max_length=200)
@@ -14,6 +16,7 @@ class Intake(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+    template = models.ForeignKey(Template, on_delete=models.DO_NOTHING, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
