@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "shared.apps.SharedConfig",
+    "cert.apps.CertConfig",
     "course.apps.CourseConfig",
 ]
 
