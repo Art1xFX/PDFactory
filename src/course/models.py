@@ -1,4 +1,5 @@
 from django.db import models
+from model_utils import FieldTracker
 
 from cert.models import Template
 
@@ -30,6 +31,8 @@ class Certificate(models.Model):
     last_name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    tracker = FieldTracker()
 
     def __str__(self):
         return f"Certificate for {self.first_name} {self.last_name} - {self.intake}"
