@@ -103,6 +103,21 @@ argon2 = ["argon2-cffi (>=23.1.0)"]
 bcrypt = ["bcrypt (>=4.1.1)"]
 
 [[package]]
+name = "django-model-utils"
+version = "5.0.0"
+description = "Django model mixins and utilities"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "django_model_utils-5.0.0-py3-none-any.whl", hash = "sha256:fec78e6c323d565a221f7c4edc703f4567d7bb1caeafe1acd16a80c5ff82056b"},
+    {file = "django_model_utils-5.0.0.tar.gz", hash = "sha256:041cdd6230d2fbf6cd943e1969318bce762272077f4ecd333ab2263924b4e5eb"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "django-stubs"
 version = "5.2.8"
 description = "Mypy stubs for Django"
@@ -665,4 +680,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "a698c2d35570e4789a2d4f64e84df29085bbc23804d40dcfc18bf5b380a41bcc"
+content-hash = "31f22db19bce5832508fed9efdf649babf0fa7422babc374dc5b96326cb4a11e"
