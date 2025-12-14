@@ -34,6 +34,7 @@ class CertificateAdmin(ModelAdmin, SimpleHistoryAdmin):
         ["intake", AutocompleteSelectFilter],
     )
     list_filter_submit = True
+    search_fields = ("first_name", "last_name", "intake__course__title")
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("intake__course")
