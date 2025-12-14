@@ -21,7 +21,7 @@ class Intake(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.course.title} ({self.start_date} - {self.end_date})"
+        return f"{self.course} ({self.start_date} - {self.end_date})"
 
 
 class Certificate(models.Model):
