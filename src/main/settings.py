@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "unfold",
+    "unfold.contrib.filters",
     "unfold.contrib.simple_history",
     "django.contrib.admin",
     "django.contrib.auth",

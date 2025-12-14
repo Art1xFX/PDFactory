@@ -3,18 +3,19 @@ from django.db.models import Value
 from django.db.models.functions import Concat
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin
+from unfold.contrib.filters.admin import AutocompleteSelectFilter
 
 from course.models import Certificate, Course, Intake
 
 
 @admin.register(Course)
 class CourseAdmin(ModelAdmin, SimpleHistoryAdmin):
-    pass
+    search_fields = ("title",)
 
 
 @admin.register(Intake)
 class IntakeAdmin(ModelAdmin, SimpleHistoryAdmin):
-    pass
+    search_fields = ("course__title",)
 
 
 @admin.register(Certificate)
@@ -28,6 +29,11 @@ class CertificateAdmin(ModelAdmin, SimpleHistoryAdmin):
         "created_at",
         "updated_at",
     )
+    list_filter = (
+        ["intake__course", AutocompleteSelectFilter],
+        ["intake", AutocompleteSelectFilter],
+    )
+    list_filter_submit = True
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("intake__course")
