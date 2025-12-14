@@ -29,6 +29,7 @@ class Certificate(models.Model):
     intake = models.ForeignKey(Intake, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    file = models.FileField(upload_to="certificates/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
