@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db import models
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
@@ -31,6 +33,7 @@ class Intake(models.Model):
 
 
 class Certificate(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     intake = models.ForeignKey(Intake, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
