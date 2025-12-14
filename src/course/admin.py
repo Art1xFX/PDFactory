@@ -20,6 +20,27 @@ class IntakeAdmin(ModelAdmin, SimpleHistoryAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(ModelAdmin, SimpleHistoryAdmin):
+    readonly_fields = ("file", "created_at", "updated_at")
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "intake",
+                    "first_name",
+                    "last_name",
+                )
+            },
+        ),
+        (
+            "Certificate",
+            {"fields": ("file",)},
+        ),
+        (
+            "Important dates",
+            {"fields": ("created_at", "updated_at")},
+        ),
+    )
     list_display = (
         "id",
         "full_name",
