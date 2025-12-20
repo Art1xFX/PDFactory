@@ -1,5 +1,6 @@
 from django.core.files.base import ContentFile
 from django.template import engines
+from weasyprint import HTML
 
 from course.models import Certificate
 
@@ -23,8 +24,10 @@ class CertificateRenderService:
             )
         )
 
-        filename = f"{course.id}/{intake.id}/{certificate.id}.html"
+        pdf = HTML(string=html).write_pdf()
 
-        certificate.file.save(filename, ContentFile(html.encode("utf-8")), save=False)
+        filename = f"{course.id}/{intake.id}/{certificate.id}.pdf"
+
+        certificate.file.save(filename, ContentFile(pdf), save=False)
 
         return ContentFile(html.encode("utf-8"))
