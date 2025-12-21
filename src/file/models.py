@@ -1,9 +1,12 @@
+from uuid import uuid4
+
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from simple_history.models import HistoricalRecords
 
 
 class File(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=255)
     file = models.FileField(
         upload_to="files/",
