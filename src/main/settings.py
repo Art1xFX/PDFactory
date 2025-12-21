@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "simple_history",
     "shared.apps.SharedConfig",
+    "file.apps.FileConfig",
     "cert.apps.CertConfig",
     "course.apps.CourseConfig",
 ]
