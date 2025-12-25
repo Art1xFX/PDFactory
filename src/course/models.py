@@ -33,8 +33,6 @@ class Intake(models.Model):
 
 
 class Certificate(models.Model):
-    dry_run: bool
-
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     intake = models.ForeignKey(Intake, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
@@ -45,6 +43,10 @@ class Certificate(models.Model):
 
     tracker = FieldTracker()
     history = HistoricalRecords()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dry_run = False
 
     def __str__(self):
         return f"Certificate for {self.first_name} {self.last_name} - {self.intake}"
