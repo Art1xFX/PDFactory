@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.db.models import Value
 from django.db.models.functions import Concat
+from import_export.admin import ImportMixin
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import AutocompleteSelectFilter
 
+from course.forms import CertificateImportForm, CodeConfirmImportForm
 from course.models import Certificate, Course, Intake
+from course.resources import CertificateResource
 
 
 @admin.register(Course)
@@ -19,7 +22,7 @@ class IntakeAdmin(ModelAdmin, SimpleHistoryAdmin):
 
 
 @admin.register(Certificate)
-class CertificateAdmin(ModelAdmin, SimpleHistoryAdmin):
+class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     readonly_fields = ("file", "created_at", "updated_at")
     fieldsets = (
         (
@@ -56,6 +59,27 @@ class CertificateAdmin(ModelAdmin, SimpleHistoryAdmin):
     )
     list_filter_submit = True
     search_fields = ("first_name", "last_name", "intake__course__title")
+
+    resource_classes = [CertificateResource]
+    import_form_class = CertificateImportForm
+    confirm_form_class = CodeConfirmImportForm
+
+    def get_confirm_form_initial(self, request, import_form):
+        initial = super().get_confirm_form_initial(request, import_form)
+        if import_form and import_form.is_valid():
+            initial["intake"] = import_form.cleaned_data["intake"]
+        return initial
+
+    def get_import_data_kwargs(self, **kwargs):
+        form = kwargs.get("form")
+
+        if form and form.is_valid():
+            kwargs.update(
+                {
+                    "intake": form.cleaned_data["intake"],
+                }
+            )
+        return kwargs
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("intake__course")

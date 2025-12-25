@@ -9,6 +9,9 @@ from course.services import CertificateRenderService
 
 @receiver(pre_save, sender=Certificate)
 def certificate_pre_save(sender: Type[Certificate], instance: Certificate, **kwargs):
+    if instance.dry_run:
+        return
+
     if instance.tracker.has_changed("file") and instance.tracker.previous("file") is None:
         return
 

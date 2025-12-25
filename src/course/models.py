@@ -33,6 +33,8 @@ class Intake(models.Model):
 
 
 class Certificate(models.Model):
+    dry_run: bool
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     intake = models.ForeignKey(Intake, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
