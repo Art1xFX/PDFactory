@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from import_export import resources
 
 from course.models import Certificate
@@ -23,6 +24,9 @@ class CertificateResource(resources.ModelResource):
         # Pass `dry_run` flag to the model instance to avoid saving files during dry runs.
         instance.dry_run = kwargs.get("dry_run", False)
         super().before_save_instance(instance, row, **kwargs)
+
+    def get_diff_headers(self):
+        return [_("first name"), _("last name"), _("intake")]
 
     def get_user_visible_fields(self):
         return [
