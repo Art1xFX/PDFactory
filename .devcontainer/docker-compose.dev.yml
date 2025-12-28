@@ -1,0 +1,39 @@
+x-db-environment: &db-environment
+  POSTGRES_DB: pdfactory
+  POSTGRES_USER: pdfactory
+  POSTGRES_PASSWORD: pdfactory
+
+x-app-environment: &app-environment
+  PDFACTORY_DEBUG: True
+  PDFACTORY_SECRET_KEY: pdfactory
+  PDFACTORY_DATABASES__default__ENGINE: django.db.backends.postgresql
+  PDFACTORY_DATABASES__default__NAME: pdfactory
+  PDFACTORY_DATABASES__default__USER: pdfactory
+  PDFACTORY_DATABASES__default__PASSWORD: pdfactory
+  PDFACTORY_DATABASES__default__HOST: postgres
+  PDFACTORY_DATABASES__default__PORT: 5432
+  PDFACTORY_CACHES__default__BACKEND: django.core.cache.backends.redis.RedisCache
+  PDFACTORY_CACHES__default__LOCATION: redis://redis:6379/0
+  PDFACTORY_CACHES__default__OPTIONS__CLIENT_CLASS: django_redis.client.DefaultClient
+
+
+services:
+  dev:
+    build:
+      context: ./.devcontainer
+      dockerfile: Dockerfile
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker-host.sock
+      - ..:/workspaces:cached
+    entrypoint: /usr/local/share/docker-init.sh
+    command: sleep infinity
+
+  postgres:
+    environment:
+      <<: *db-environment
+
+  django:
+    environment:
+      <<:
+        - *app-environment
