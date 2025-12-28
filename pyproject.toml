@@ -17,6 +17,7 @@ dependencies = [
     "django-import-export (>=4.3.14,<5.0.0)",
     "gunicorn (>=23.0.0,<24.0.0)",
     "dynaconf (>=3.2.12,<4.0.0)",
+    "psycopg[binary] (>=3.3.2,<4.0.0)",
 ]
 
 
