@@ -1,0 +1,42 @@
+volumes:
+  postgres_data:
+  redis_data:
+  media_data:
+  static_data:
+
+
+services:
+  postgres:
+    image: wodby/postgres:17.7-1.38.1@sha256:bc940bc4a861efaab85b186c357cd5e5a7cc6fd1c83f2ff21ee31c73da16dca0
+    stop_grace_period: 30s
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: wodby/redis:7.4-5.1.0@sha256:76391828da41d9e48ec0a8959c9d087c3c5fb2af5274aa0b2d08b630ed55fe0c
+    stop_grace_period: 30s
+    volumes:
+      - redis_data:/data
+
+  django:
+    build:
+      context: ./
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - media_data:/usr/src/app/media
+      - static_data:/usr/src/app/static
+
+  nginx:
+    image: wodby/nginx:1.28-5.46.3@sha256:eb91d1a6a94698fcc579c40c5c2d7e9ca88432889a1957a9fa34204b081902b9
+    depends_on:
+      - django
+    environment:
+      NGINX_STATIC_OPEN_FILE_CACHE: "off"
+      NGINX_ERROR_LOG_LEVEL: debug
+      NGINX_VHOST_PRESET: django
+      NGINX_BACKEND_HOST: django
+    volumes:
+      - media_data:/var/www/html/media
+      - static_data:/var/www/html/static
