@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+from importlib import import_module
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,3 +139,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
 # endregion Static and media files
+
+# region Dynaconf settings
+# Read more at https://www.dynaconf.com/django/
+
+dynaconf = import_module("dynaconf")
+
+settings = dynaconf.DjangoDynaconf(__name__, ENVVAR_PREFIX_FOR_DYNACONF="PDFACTORY")
+
+# endregion Dynaconf settings
