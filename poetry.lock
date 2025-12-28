@@ -483,6 +483,28 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "dynaconf"
+version = "3.2.12"
+description = "The dynamic configurator for your Python Project"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "dynaconf-3.2.12-py2.py3-none-any.whl", hash = "sha256:eb2a11865917dff8810c6098cd736b8f4d2f4e39ad914500e2dfbe064b82c499"},
+    {file = "dynaconf-3.2.12.tar.gz", hash = "sha256:29cea583b007d890e6031fa89c0ac489b631c73dbee83bcd5e6f97602c26354e"},
+]
+
+[package.extras]
+all = ["configobj", "hvac", "redis", "ruamel.yaml"]
+configobj = ["configobj"]
+ini = ["configobj"]
+redis = ["redis"]
+test = ["configobj", "django", "flask (>=0.12)", "hvac (>=1.1.0)", "pytest", "pytest-cov", "pytest-mock", "pytest-xdist", "python-dotenv", "radon", "redis", "toml"]
+toml = ["toml"]
+vault = ["hvac"]
+yaml = ["ruamel.yaml"]
+
+[[package]]
 name = "fonttools"
 version = "4.61.1"
 description = "Tools to manipulate font files"
@@ -1378,4 +1400,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "dd8831254a7f60e76144344f684f153ef4c7a1eba50ab01e0fe8ef531cf23c4e"
+content-hash = "3a89d27bffaaf1f77913129741db5da8cad0556326bae31276587aed8da93a06"
