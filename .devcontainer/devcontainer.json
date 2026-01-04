@@ -28,6 +28,11 @@
 
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"[python]": {
+					"editor.defaultFormatter": "charliermarsh.ruff"
+				}
+			},
 			"extensions": [
 				"PyCQA.bandit-pycqa",
 				"streetsidesoftware.code-spell-checker",
