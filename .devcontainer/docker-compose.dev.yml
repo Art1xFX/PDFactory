@@ -15,6 +15,10 @@ x-app-environment: &app-environment
   PDFACTORY_CACHES__default__BACKEND: django.core.cache.backends.redis.RedisCache
   PDFACTORY_CACHES__default__LOCATION: redis://redis:6379/0
   PDFACTORY_CACHES__default__OPTIONS__CLIENT_CLASS: django_redis.client.DefaultClient
+  PDFACTORY_CELERY_BROKER_URL: redis://redis:6379/1
+  PDFACTORY_CELERY_RESULT_BACKEND: redis://redis:6379/1
+  PDFACTORY_CELERY_TASK_SERIALIZER: json
+  PDFACTORY_CELERY_RESULT_SERIALIZER: json
 
 
 services:
