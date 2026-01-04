@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "simple_history",
     "import_export",
+    "import_export_extensions",
     "shared.apps.SharedConfig",
     "file.apps.FileConfig",
     "cert.apps.CertConfig",
