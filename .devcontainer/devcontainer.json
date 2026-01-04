@@ -26,5 +26,23 @@
 		"ghcr.io/devcontainers-extra/features/poetry:2": {}
 	},
 
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"PyCQA.bandit-pycqa",
+				"streetsidesoftware.code-spell-checker",
+				"tamasfe.even-better-toml",
+				"ms-python.mypy-type-checker",
+				"ms-python.vscode-pylance",
+				"ms-python.pylint",
+				"ms-python.python",
+				"ms-python.debugpy",
+				"ms-python.vscode-python-envs",
+				"charliermarsh.ruff",
+				"redhat.vscode-yaml"
+			]
+		}
+	},
+
 	"postCreateCommand": "poetry install"
 }
