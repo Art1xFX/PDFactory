@@ -37,3 +37,13 @@ services:
     environment:
       <<:
         - *app-environment
+
+  celery:
+    environment:
+      <<:
+        - *app-environment
+
+  beat:
+    environment:
+      <<:
+        - *app-environment
