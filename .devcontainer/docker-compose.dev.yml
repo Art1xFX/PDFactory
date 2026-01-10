@@ -41,9 +41,12 @@ services:
     build:
       args:
         ENVIRONMENT: development
+    command: python -Xfrozen_modules=off -m debugpy --listen django:5678 manage.py runserver django:8080 --skip-checks
     environment:
       <<:
         - *app-environment
+    volumes:
+      - ./src:/usr/src/app:cached
 
   celery:
     build:
