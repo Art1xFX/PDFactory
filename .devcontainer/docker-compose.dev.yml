@@ -38,16 +38,25 @@ services:
       <<: *db-environment
 
   django:
+    build:
+      args:
+        ENVIRONMENT: development
     environment:
       <<:
         - *app-environment
 
   celery:
+    build:
+      args:
+        ENVIRONMENT: development
     environment:
       <<:
         - *app-environment
 
   beat:
+    build:
+      args:
+        ENVIRONMENT: development
     environment:
       <<:
         - *app-environment
