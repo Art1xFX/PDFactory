@@ -52,6 +52,7 @@ services:
     build:
       args:
         ENVIRONMENT: development
+    command: python -Xfrozen_modules=off -m debugpy --listen celery:5678 /home/wodby/.local/bin/celery -A main worker --concurrency=5 -l INFO -f /dev/stderr
     environment:
       <<:
         - *app-environment
@@ -60,6 +61,7 @@ services:
     build:
       args:
         ENVIRONMENT: development
+    command: python -Xfrozen_modules=off -m debugpy --listen beat:5678 /home/wodby/.local/bin/celery -A main beat -l INFO -f /dev/stderr
     environment:
       <<:
         - *app-environment
