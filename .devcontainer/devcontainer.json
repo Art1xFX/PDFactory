@@ -31,6 +31,84 @@
 			"settings": {
 				"[python]": {
 					"editor.defaultFormatter": "charliermarsh.ruff"
+				},
+				"launch": {
+					"version": "0.2.0",
+					"configurations": [
+						{
+							"name": "Backend: Django",
+							"type": "debugpy",
+							"request": "attach",
+							"connect": {
+								"host": "django",
+								"port": 5678
+							},
+							"django": true,
+							"justMyCode": false,
+							"pathMappings": [
+								{
+									"localRoot": "${workspaceFolder}/src/",
+									"remoteRoot": "/usr/src/app/"
+								},
+								{
+									"localRoot": "${workspaceFolder}/.venv/lib/python3.14/site-packages/",
+									"remoteRoot": "/home/wodby/.local/lib/python3.14/site-packages/"
+								}
+							]
+						},
+						{
+							"name": "Backend: Celery",
+							"type": "debugpy",
+							"request": "attach",
+							"connect": {
+								"host": "celery",
+								"port": 5678
+							},
+							"django": true,
+							"justMyCode": false,
+							"pathMappings": [
+								{
+									"localRoot": "${workspaceFolder}/src/",
+									"remoteRoot": "/usr/src/app/"
+								},
+								{
+									"localRoot": "${workspaceFolder}/.venv/lib/python3.14/site-packages/",
+									"remoteRoot": "/home/wodby/.local/lib/python3.14/site-packages/"
+								}
+							]
+						},
+						{
+							"name": "Backend: Beat",
+							"type": "debugpy",
+							"request": "attach",
+							"connect": {
+								"host": "beat",
+								"port": 5678
+							},
+							"django": true,
+							"justMyCode": false,
+							"pathMappings": [
+								{
+									"localRoot": "${workspaceFolder}/src/",
+									"remoteRoot": "/usr/src/app/"
+								},
+								{
+									"localRoot": "${workspaceFolder}/.venv/lib/python3.14/site-packages/",
+									"remoteRoot": "/home/wodby/.local/lib/python3.14/site-packages/"
+								}
+							]
+						}
+					],
+					"compounds": [
+						{
+							"name": "Backend",
+							"configurations": [
+								"Backend: Django",
+								"Backend: Celery",
+								"Backend: Beat"
+							]
+						}
+					]
 				}
 			},
 			"extensions": [
