@@ -11,7 +11,8 @@
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
 	"remoteEnv": {
-		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+		"DJANGO_SETTINGS_MODULE": "main.settings"
 	},
 
 	"features": {
