@@ -4,8 +4,8 @@ ARG ENVIRONMENT=production
 
 RUN --mount=type=cache,id=pip-cache,uid=1000,gid=1000,target=/home/wodby/.cache/pip/ \
     --mount=type=cache,id=poetry-cache,uid=1000,gid=1000,target=/home/wodby/.cache/pypoetry/ \
-    pip install --upgrade pip && \
-    pip install poetry && \
+    pip install --upgrade 'pip==25.3' && \
+    pip install 'poetry==2.3.2' && \
     poetry config virtualenvs.create false
 
 ADD ./pyproject.toml ./poetry.lock ./LICENSE ./
