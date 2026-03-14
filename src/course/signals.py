@@ -1,14 +1,16 @@
+from functools import partial
 from typing import Type
 
-from django.db.models.signals import pre_save
+from django.db import transaction
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from course.models import Certificate
-from course.services import CertificateRenderService
+from course.tasks import render_certificate
 
 
-@receiver(pre_save, sender=Certificate)
-def certificate_pre_save(sender: Type[Certificate], instance: Certificate, **kwargs):
+@receiver(post_save, sender=Certificate)
+def certificate_post_save(sender: Type[Certificate], instance: Certificate, **kwargs):
     if instance.dry_run:
         return
 
@@ -16,5 +18,9 @@ def certificate_pre_save(sender: Type[Certificate], instance: Certificate, **kwa
         return
 
     if set(instance.tracker.changed().keys()) & {"first_name", "last_name", "intake"}:
-        service = CertificateRenderService(certificate=instance)
-        service.render()
+        transaction.on_commit(
+            partial(
+                render_certificate.send,
+                str(instance.id),
+            )
+        )

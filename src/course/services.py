@@ -24,10 +24,7 @@ class CertificateRenderService:
             )
         )
 
-        pdf = HTML(string=html).write_pdf()
-
         filename = f"{course.id}/{intake.id}/{certificate.id}.pdf"
+        file = ContentFile(HTML(string=html).write_pdf())
 
-        certificate.file.save(filename, ContentFile(pdf), save=False)
-
-        return ContentFile(html.encode("utf-8"))
+        return (filename, file)
