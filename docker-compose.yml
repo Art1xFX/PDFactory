@@ -36,30 +36,6 @@ services:
       - media_data:/usr/src/app/media
       - static_data:/usr/src/app/static
 
-  celery:
-    build:
-      context: ./
-    command: celery -A main worker --concurrency=5 -l INFO -f /dev/stderr
-    depends_on:
-      - postgres
-      - redis
-      - rabbitmq
-    volumes:
-      - media_data:/usr/src/app/media
-      - static_data:/usr/src/app/static
-
-
-  beat:
-    build:
-      context: ./
-    command: celery -A main beat -l INFO -f /dev/stderr
-    depends_on:
-      - postgres
-      - redis
-    volumes:
-      - media_data:/usr/src/app/media
-      - static_data:/usr/src/app/static
-
   dramatiq:
     build:
         context: ./
