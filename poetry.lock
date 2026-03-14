@@ -683,6 +683,30 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "dramatiq"
+version = "2.1.0"
+description = "Background Processing for Python 3."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "dramatiq-2.1.0-py3-none-any.whl", hash = "sha256:3ef940c2815722d3679aed79ef96c805f02fd33d4361529b2de30f01511ca44d"},
+    {file = "dramatiq-2.1.0.tar.gz", hash = "sha256:cf81550729de6cf64234b05bd63970645654aaf38967faa7a2b6e401384bb090"},
+]
+
+[package.dependencies]
+pika = {version = ">=1.0,<2.0", optional = true, markers = "extra == \"rabbitmq\""}
+
+[package.extras]
+all = ["gevent (>=25.9.1)", "pika (>=1.0,<2.0)", "prometheus-client (>=0.2)", "pylibmc (>=1.5,<2.0)", "redis (>=4.0,<8.0)", "watchdog (>=6.0.0)"]
+gevent = ["gevent (>=25.9.1)"]
+memcached = ["pylibmc (>=1.5,<2.0)"]
+prometheus = ["prometheus-client (>=0.2)"]
+rabbitmq = ["pika (>=1.0,<2.0)"]
+redis = ["redis (>=4.0,<8.0)"]
+watch = ["watchdog (>=6.0.0)"]
+
+[[package]]
 name = "dynaconf"
 version = "3.2.12"
 description = "The dynamic configurator for your Python Project"
@@ -1099,6 +1123,23 @@ files = [
     {file = "pathspec-0.12.1-py3-none-any.whl", hash = "sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08"},
     {file = "pathspec-0.12.1.tar.gz", hash = "sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712"},
 ]
+
+[[package]]
+name = "pika"
+version = "1.3.2"
+description = "Pika Python AMQP Client Library"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "pika-1.3.2-py3-none-any.whl", hash = "sha256:0779a7c1fafd805672796085560d290213a465e4f6f76a6fb19e378d8041a14f"},
+    {file = "pika-1.3.2.tar.gz", hash = "sha256:b2a327ddddf8570b4965b3576ac77091b850262d34ce8c1d8cb4e4146aa4145f"},
+]
+
+[package.extras]
+gevent = ["gevent"]
+tornado = ["tornado"]
+twisted = ["twisted"]
 
 [[package]]
 name = "pillow"
@@ -1890,4 +1931,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "5d60e2b4f795f695bb3d801a465cca67d6d4fbbe097b6d9abe363ffd0e4fa7d4"
+content-hash = "16f76443453bec16a784122c52f92578c6426b15088fd4cc0f4ff629882ea8c7"
