@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django_dramatiq",
     "unfold",
     "unfold.contrib.forms",
     "unfold.contrib.filters",

@@ -3,6 +3,7 @@ volumes:
   redis_data:
   media_data:
   static_data:
+  rabbitmq_data:
 
 
 services:
@@ -18,12 +19,19 @@ services:
     volumes:
       - redis_data:/data
 
+  rabbitmq:
+    image: rabbitmq:4.2.4-alpine@sha256:83522278ca69414e4895b3ea3c0f943c63ad316c063f9cda9c32fd42fe800f47
+    stop_grace_period: 30s
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
   django:
     build:
       context: ./
     depends_on:
       - postgres
       - redis
+      - rabbitmq
     volumes:
       - media_data:/usr/src/app/media
       - static_data:/usr/src/app/static
@@ -35,6 +43,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - rabbitmq
     volumes:
       - media_data:/usr/src/app/media
       - static_data:/usr/src/app/static
@@ -47,6 +56,18 @@ services:
     depends_on:
       - postgres
       - redis
+    volumes:
+      - media_data:/usr/src/app/media
+      - static_data:/usr/src/app/static
+
+  dramatiq:
+    build:
+        context: ./
+    command: python manage.py rundramatiq
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
     volumes:
       - media_data:/usr/src/app/media
       - static_data:/usr/src/app/static

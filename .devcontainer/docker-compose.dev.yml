@@ -19,6 +19,8 @@ x-app-environment: &app-environment
   PDFACTORY_CELERY_RESULT_BACKEND: redis://redis:6379/1
   PDFACTORY_CELERY_TASK_SERIALIZER: json
   PDFACTORY_CELERY_RESULT_SERIALIZER: json
+  PDFACTORY_DRAMATIQ_BROKER__BROKER: dramatiq.brokers.rabbitmq.RabbitmqBroker
+  PDFACTORY_DRAMATIQ_BROKER__OPTIONS__url: amqp://rabbitmq:5672
 
 
 services:
@@ -65,3 +67,14 @@ services:
     environment:
       <<:
         - *app-environment
+
+  dramatiq:
+    build:
+      args:
+        ENVIRONMENT: development
+    command: python -Xfrozen_modules=off -m debugpy --listen dramatiq:5678 manage.py rundramatiq --skip-checks --watch .
+    environment:
+      <<:
+        - *app-environment
+    volumes:
+      - ./src:/usr/src/app:cached
