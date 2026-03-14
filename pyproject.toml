@@ -19,6 +19,7 @@ dependencies = [
     "psycopg[binary] (>=3.3.2,<4.0.0)",
     "celery[redis] (>=5.6.2,<6.0.0)",
     "dramatiq[rabbitmq] (>=2.1.0,<3.0.0)",
+    "django-dramatiq (>=0.15.0,<0.16.0)",
 ]
 
 

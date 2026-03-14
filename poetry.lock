@@ -570,6 +570,25 @@ argon2 = ["argon2-cffi (>=23.1.0)"]
 bcrypt = ["bcrypt (>=4.1.1)"]
 
 [[package]]
+name = "django-dramatiq"
+version = "0.15.0"
+description = "A Django app for Dramatiq."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_dramatiq-0.15.0-py3-none-any.whl", hash = "sha256:23f0bc418a860952adbf822c4aa3b9c46c51d3d9f50be0a8ed3d19a53380df1d"},
+    {file = "django_dramatiq-0.15.0.tar.gz", hash = "sha256:e3cf1b2ac288fe4a7aa198c9450fe242ed312df8850f3f9e18ce01b8acc78b96"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+dramatiq = ">=1.11"
+
+[package.extras]
+dev = ["flake8", "flake8-quotes", "isort", "pytest", "pytest-cov", "pytest-django", "twine"]
+
+[[package]]
 name = "django-import-export"
 version = "4.3.14"
 description = "Django application and library for importing and exporting data with included admin integration."
@@ -1975,4 +1994,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "56b50fd803c13818426d837b0894333f09b8bd8609d04052de897e2bfafa1871"
+content-hash = "c059feaa781483b0ab92cb2c3da5b1a1c2fb215ffde730d953f00afb9c060c94"
