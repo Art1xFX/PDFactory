@@ -1,0 +1,27 @@
+DEBUG: True
+SECRET_KEY: pdfactory
+
+DATABASES:
+  default:
+    ENGINE: django.db.backends.postgresql
+    NAME: pdfactory
+    USER: pdfactory
+    PASSWORD: pdfactory
+    HOST: postgres
+    PORT: 5432
+
+CACHES:
+  default:
+    BACKEND: django.core.cache.backends.redis.RedisCache
+    LOCATION: redis://redis:6379/0
+    OPTIONS:
+      CLIENT_CLASS: django_redis.client.DefaultClient
+
+DRAMATIQ_BROKER:
+  BROKER: dramatiq.brokers.rabbitmq.RabbitmqBroker
+  OPTIONS:
+    url: amqp://rabbitmq:5672
+  MIDDLEWARE:
+    - dramatiq.middleware.Retries
+    - django_dramatiq.middleware.AdminMiddleware
+    - django_dramatiq.middleware.DbConnectionsMiddleware

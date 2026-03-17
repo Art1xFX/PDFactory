@@ -12,7 +12,9 @@
 
 	"remoteEnv": {
 		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
-		"DJANGO_SETTINGS_MODULE": "main.settings"
+		"DJANGO_SETTINGS_MODULE": "main.settings",
+		"SETTINGS_FILES_FOR_DYNACONF": "/etc/pdfactory/settings.yml",
+		"ENVIRONMENTS_FOR_DYNACONF": "False"
 	},
 
 	"features": {
