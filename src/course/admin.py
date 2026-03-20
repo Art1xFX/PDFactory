@@ -1,14 +1,20 @@
+from uuid import UUID
+
 from django.contrib import admin
 from django.db.models import Value
 from django.db.models.functions import Concat
+from django.http import FileResponse, HttpRequest
+from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportMixin
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import AutocompleteSelectFilter
+from unfold.decorators import action
 
 from course.forms import CertificateImportForm, CodeConfirmImportForm
 from course.models import Certificate, Course, Intake
 from course.resources import CertificateResource
+from course.utils import CertificateFileNameBuilder
 
 
 @admin.register(Course)
@@ -50,7 +56,6 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
         "intake__course",
         "intake__start_date",
         "intake__end_date",
-        "created_at",
         "updated_at",
     )
     list_filter = (
@@ -59,6 +64,7 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     )
     list_filter_submit = True
     search_fields = ("first_name", "last_name", "intake__course__title")
+    actions_row = ["download_row_action"]
 
     resource_classes = [CertificateResource]
     import_form_class = CertificateImportForm
@@ -102,3 +108,30 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     @admin.display(description="End date", ordering="intake__end_date")
     def intake__end_date(self, obj):
         return obj.intake.end_date
+
+    @action(
+        description=_("Download"),
+        icon="download",
+        url_path="download",
+    )
+    def download_row_action(self, request: HttpRequest, object_id: UUID):
+        certificate = Certificate.objects.get(id=object_id)
+        file = certificate.file
+
+        return FileResponse(
+            file,
+            as_attachment=True,
+            filename=(
+                CertificateFileNameBuilder(certificate)
+                .add_first_name()
+                .add_separator()
+                .add_last_name()
+                .add_separator()
+                .add_course_title()
+                .add_separator()
+                .add_intake_start_date()
+                .add_separator()
+                .add_intake_end_date()
+                .build()
+            ),
+        )
