@@ -5,7 +5,7 @@ x-db-environment: &db-environment
 
 x-app-environment: &app-environment
   SETTINGS_FILES_FOR_DYNACONF: /etc/pdfactory/settings.yml
-  ENVIRONMENTS_FOR_DYNACONF: False
+  ENVIRONMENTS_FOR_DYNACONF: "false"
 
 services:
   dev:
@@ -16,7 +16,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker-host.sock
       - ..:/workspaces:cached
-      - ./.devcontainer/settings.yml:/etc/pdfactory/settings.yml:ro
     entrypoint: /usr/local/share/docker-init.sh
     command: sleep infinity
 

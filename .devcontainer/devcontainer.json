@@ -14,8 +14,16 @@
 		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
 		"DJANGO_SETTINGS_MODULE": "main.settings",
 		"SETTINGS_FILES_FOR_DYNACONF": "/etc/pdfactory/settings.yml",
-		"ENVIRONMENTS_FOR_DYNACONF": "False"
+		"ENVIRONMENTS_FOR_DYNACONF": "false"
 	},
+
+	"mounts": [
+		{
+			"type": "bind",
+			"source": "${localWorkspaceFolder}/.devcontainer/settings.yml",
+			"target": "/etc/pdfactory/settings.yml"
+		}
+	],
 
 	"features": {
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1.9.0": {
