@@ -48,6 +48,8 @@
 				"pylint.importStrategy": "fromEnvironment",
 				"mypy-type-checker.importStrategy": "fromEnvironment",
 				"ruff.importStrategy": "fromEnvironment",
+				"python-envs.defaultEnvManager": "ms-python.python:poetry",
+    			"python-envs.defaultPackageManager": "ms-python.python:poetry",
 				"launch": {
 					"version": "0.2.0",
 					"configurations": [
