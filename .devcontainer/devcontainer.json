@@ -9,22 +9,29 @@
 	],
 	"service": "dev",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
 	"remoteEnv": {
 		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
 		"DJANGO_SETTINGS_MODULE": "main.settings",
 		"SETTINGS_FILES_FOR_DYNACONF": "/etc/pdfactory/settings.yml",
 		"ENVIRONMENTS_FOR_DYNACONF": "false"
 	},
-
 	"mounts": [
 		{
 			"type": "bind",
 			"source": "${localWorkspaceFolder}/.devcontainer/settings.yml",
 			"target": "/etc/pdfactory/settings.yml"
+		},
+		{
+			"type": "volume",
+			"source": "media_data",
+			"target": "/workspaces/${localWorkspaceFolderBasename}/src/media"
+		},
+		{
+			"type": "volume",
+			"source": "static_data",
+			"target": "/workspaces/${localWorkspaceFolderBasename}/src/static"
 		}
 	],
-
 	"features": {
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1.9.0": {
 			"version": "latest",
@@ -38,7 +45,6 @@
 			"version": "2.3.2"
 		}
 	},
-
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -49,7 +55,7 @@
 				"mypy-type-checker.importStrategy": "fromEnvironment",
 				"ruff.importStrategy": "fromEnvironment",
 				"python-envs.defaultEnvManager": "ms-python.python:poetry",
-    			"python-envs.defaultPackageManager": "ms-python.python:poetry",
+				"python-envs.defaultPackageManager": "ms-python.python:poetry",
 				"launch": {
 					"version": "0.2.0",
 					"configurations": [
@@ -100,6 +106,5 @@
 			]
 		}
 	},
-
 	"postCreateCommand": "poetry install"
 }
