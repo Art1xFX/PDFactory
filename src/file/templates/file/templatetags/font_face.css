@@ -1,0 +1,8 @@
+{% for font_face in font_faces %}
+@font-face {
+  font-family: "{{ font_face.family_name }}";
+  src: url("{{ font_face.src__url }}") format("{{ font_face.src__format }}");
+  font-weight: {{ font_face.font_weight }};
+  font-style: {{ font_face.font_style }};
+}
+{% endfor %}
