@@ -1,16 +1,15 @@
 from functools import partial
-from typing import Type
 
 from django.db import transaction
-from django.db.models.signals import post_save
 from django.dispatch import receiver
+from simple_history.signals import post_create_historical_record
 
 from course.models import Certificate
 from course.tasks import render_certificate
 
 
-@receiver(post_save, sender=Certificate)
-def certificate_post_save(sender: Type[Certificate], instance: Certificate, **kwargs):
+@receiver(post_create_historical_record, sender=Certificate.history.model)
+def certificate_post_create_historical_record(sender, instance: Certificate, history_instance, **kwargs):
     if instance.dry_run:
         return
 
@@ -22,5 +21,6 @@ def certificate_post_save(sender: Type[Certificate], instance: Certificate, **kw
             partial(
                 render_certificate.send,
                 certificate_id=str(instance.id),
+                history_id=history_instance.history_id,
             )
         )
