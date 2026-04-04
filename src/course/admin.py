@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from django.contrib import admin
-from django.db.models import Value
+from django.db.models import OuterRef, Subquery, Value
 from django.db.models.functions import Concat
 from django.http import FileResponse, HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -9,10 +9,10 @@ from import_export.admin import ImportMixin
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import AutocompleteSelectFilter
-from unfold.decorators import action
+from unfold.decorators import action, display
 
 from course.forms import CertificateImportForm, CodeConfirmImportForm
-from course.models import Certificate, Course, Intake
+from course.models import Certificate, CertificateRenderTask, Course, Intake
 from course.resources import CertificateResource
 from course.utils import CertificateFileNameBuilder
 
@@ -53,6 +53,7 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     list_display = (
         "id",
         "full_name",
+        "display_status",
         "intake__course",
         "intake__start_date",
         "intake__end_date",
@@ -88,7 +89,17 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
         return kwargs
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related("intake__course")
+        latest_task_status = Subquery(
+            CertificateRenderTask.objects.filter(certificate=OuterRef("pk"))
+            .order_by("-updated_at")
+            .values("status")[:1]
+        )
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("intake__course")
+            .annotate(latest_task_status=latest_task_status)
+        )
 
     @admin.display(
         description="Full name",
@@ -96,6 +107,22 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     )
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
+
+    @display(
+        description="Status",
+        label={
+            CertificateRenderTask.Status.PENDING.label: "warning",
+            CertificateRenderTask.Status.IN_PROGRESS.label: "info",
+            CertificateRenderTask.Status.DONE.label: "success",
+            CertificateRenderTask.Status.FAILED.label: "danger",
+            _("Unknown"): "secondary",
+        },
+    )
+    def display_status(self, obj):
+        if not obj.latest_task_status:
+            return _("Unknown")
+
+        return CertificateRenderTask.Status(obj.latest_task_status).label
 
     @admin.display(description="Course", ordering="intake__course__title")
     def intake__course(self, obj):
@@ -135,3 +162,13 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
                 .build()
             ),
         )
+
+
+@admin.register(CertificateRenderTask)
+class CertificateRenderTaskAdmin(ModelAdmin):
+    list_display = ("id", "certificate", "status", "updated_at")
+    list_filter = ("status",)
+    search_fields = ("certificate__first_name", "certificate__last_name", "certificate__intake__course__title")
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("certificate__intake__course")
