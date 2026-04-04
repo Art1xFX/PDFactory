@@ -21,6 +21,6 @@ def certificate_post_save(sender: Type[Certificate], instance: Certificate, **kw
         transaction.on_commit(
             partial(
                 render_certificate.send,
-                str(instance.id),
+                certificate_id=str(instance.id),
             )
         )

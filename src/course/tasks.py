@@ -9,7 +9,7 @@ from course.services import CertificateRenderService
 
 @dramatiq.actor
 @transaction.atomic
-def render_certificate(certificate_id: str):
+def render_certificate(*, certificate_id: str):
     instance = Certificate.objects.select_for_update().get(id=UUID(certificate_id))
 
     service = CertificateRenderService(certificate=instance)
