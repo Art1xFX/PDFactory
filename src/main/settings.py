@@ -150,6 +150,7 @@ MEDIA_URL = "/media/"
 # region Unfold
 
 UNFOLD = {
+    "SITE_TITLE": "PDFactory",
     "SITE_HEADER": "PDFactory",
     "SITE_URL": "/",
     "SITE_SYMBOL": "docs",
