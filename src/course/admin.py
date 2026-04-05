@@ -1,10 +1,12 @@
 from uuid import UUID
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db.models import Count, OuterRef, Subquery, Value
 from django.db.models.functions import Concat
 from django.http import FileResponse, HttpRequest
+from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportMixin
 from simple_history.admin import SimpleHistoryAdmin
@@ -15,6 +17,7 @@ from unfold.decorators import action, display
 from course.forms import CertificateImportForm, CodeConfirmImportForm
 from course.models import Certificate, CertificateRenderTask, Course, Intake
 from course.resources import CertificateResource
+from course.tasks import render_certificate
 from course.utils import CertificateFileNameBuilder
 from shared.widgets import Target, a
 
@@ -163,7 +166,7 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     )
     list_filter_submit = True
     search_fields = ("first_name", "last_name", "intake__course__title")
-    actions_row = ["download_row_action"]
+    actions_row = ["regenerate_row_action", "download_row_action"]
 
     resource_classes = [CertificateResource]
     import_form_class = CertificateImportForm
@@ -239,8 +242,38 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
         return obj.intake.end_date
 
     @action(
-        description=_("Download"),
+        icon="settings_backup_restore",
+        description=_("Regenerate"),
+        url_path="regenerate",
+    )
+    def regenerate_row_action(self, request: HttpRequest, object_id: UUID):
+        certificate = Certificate.objects.get(id=object_id)
+        history_instance = certificate.history.first()
+
+        render_certificate.send(
+            certificate_id=str(certificate.id),
+            history_id=history_instance.history_id,
+        )
+
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            mark_safe(
+                _("Certificate regeneration for {certificate} has been started.").format(
+                    certificate=a(
+                        str(certificate),
+                        href=reverse("admin:course_certificate_change", args=(certificate.id,)),
+                        target=Target.SELF,
+                    )
+                ),
+            ),
+        )
+
+        return redirect(reverse("admin:course_certificate_changelist"))
+
+    @action(
         icon="download",
+        description=_("Download"),
         url_path="download",
     )
     def download_row_action(self, request: HttpRequest, object_id: UUID):
