@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from importlib import import_module
 from pathlib import Path
 
+from main.utils import gettext_lazy as _
+from main.utils import reverse_lazy
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -142,6 +145,79 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
 # endregion Static and media files
+
+
+# region Unfold
+
+UNFOLD = {
+    "SITE_HEADER": "PDFactory",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "docs",
+    "SIDEBAR": {
+        "show_search": True,
+        "command_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("Courses"),
+                "separator": True,
+                "items": [
+                    {
+                        "icon": "school",
+                        "title": _("Courses"),
+                        "link": reverse_lazy("admin:course_course_changelist"),
+                        "permission": lambda request: request.user.has_perm("course.view_course"),
+                    },
+                    {
+                        "icon": "event",
+                        "title": _("Intakes"),
+                        "link": reverse_lazy("admin:course_intake_changelist"),
+                        "permission": lambda request: request.user.has_perm("course.view_intake"),
+                    },
+                    {
+                        "icon": "workspace_premium",
+                        "title": _("Certificates"),
+                        "link": reverse_lazy("admin:course_certificate_changelist"),
+                        "permission": lambda request: request.user.has_perm("course.view_certificate"),
+                    },
+                    {
+                        "icon": "integration_instructions",
+                        "title": _("Templates"),
+                        "link": reverse_lazy("admin:cert_template_changelist"),
+                        "permission": lambda request: request.user.has_perm("cert.view_template"),
+                    },
+                ],
+            },
+            {
+                "title": _("Files"),
+                "separator": True,
+                "items": [
+                    {
+                        "icon": "attach_file",
+                        "title": _("Files"),
+                        "link": reverse_lazy("admin:file_file_changelist"),
+                        "permission": lambda request: request.user.has_perm("file.view_file"),
+                    },
+                    {
+                        "icon": "match_case",
+                        "title": _("Fonts"),
+                        "link": reverse_lazy("admin:file_fontfamily_changelist"),
+                        "permission": lambda request: request.user.has_perm("file.view_fontfamily"),
+                    },
+                ],
+            },
+            {
+                "title": _("Users"),
+                "separator": True,
+                "items": [],
+            },
+        ],
+    },
+}
+
+
+# endregion Unfold
+
 
 # region Dynaconf settings
 # Read more at https://www.dynaconf.com/django/
