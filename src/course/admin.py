@@ -17,7 +17,7 @@ from unfold.decorators import action, display
 from course.forms import CertificateImportForm, CodeConfirmImportForm
 from course.models import Certificate, CertificateRenderTask, Course, Intake
 from course.resources import CertificateResource
-from course.tasks import render_certificate
+from course.tasks import Trigger, render_certificate
 from course.utils import CertificateFileNameBuilder
 from shared.widgets import Target, a
 
@@ -253,6 +253,7 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
         render_certificate.send(
             certificate_id=str(certificate.id),
             history_id=history_instance.history_id,
+            trigger=Trigger.MANUAL.value,
         )
 
         messages.add_message(
