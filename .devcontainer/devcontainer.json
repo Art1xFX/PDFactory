@@ -33,7 +33,7 @@
 		}
 	],
 	"features": {
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1.9.0": {
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1.9.1": {
 			"version": "latest",
 			"enableNonRootDocker": "true",
 			"moby": "false"
