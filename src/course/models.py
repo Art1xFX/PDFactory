@@ -20,7 +20,7 @@ class Course(models.Model):
 
 
 class Intake(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="intakes")
     start_date = models.DateField()
     end_date = models.DateField()
     template = models.ForeignKey(Template, on_delete=models.DO_NOTHING, null=False, blank=False)
@@ -35,7 +35,7 @@ class Intake(models.Model):
 
 class Certificate(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    intake = models.ForeignKey(Intake, on_delete=models.CASCADE)
+    intake = models.ForeignKey(Intake, on_delete=models.CASCADE, related_name="certificates")
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     file = models.FileField(upload_to="certificates/", null=True, blank=True)

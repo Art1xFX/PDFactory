@@ -1,30 +1,126 @@
 from uuid import UUID
 
 from django.contrib import admin
-from django.db.models import OuterRef, Subquery, Value
+from django.db.models import Count, OuterRef, Subquery, Value
 from django.db.models.functions import Concat
 from django.http import FileResponse, HttpRequest
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportMixin
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin
-from unfold.contrib.filters.admin import AutocompleteSelectFilter
+from unfold.contrib.filters.admin import AutocompleteSelectFilter, RangeDateFilter
 from unfold.decorators import action, display
 
 from course.forms import CertificateImportForm, CodeConfirmImportForm
 from course.models import Certificate, CertificateRenderTask, Course, Intake
 from course.resources import CertificateResource
 from course.utils import CertificateFileNameBuilder
+from shared.widgets import Target, a
 
 
 @admin.register(Course)
 class CourseAdmin(ModelAdmin, SimpleHistoryAdmin):
     search_fields = ("title",)
+    list_display = ("title", "display_intakes", "created_at", "updated_at")
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related("intakes")
+            .annotate(intake_count=Count("intakes", distinct=True))
+        )
+
+    @display(
+        description=_("Intakes"),  # type: ignore[arg-type]
+        ordering="intake_count",
+        dropdown=True,
+    )
+    def display_intakes(self, obj: Course):
+        items = [
+            {
+                "title": f"{intake.start_date} - {intake.end_date}",
+                "link": reverse("admin:course_intake_change", args=(intake.id,)),
+            }
+            for intake in obj.intakes.all()
+        ]
+        count = len(items)
+
+        return {
+            "title": count if count else "-",
+            "items": items,
+            "striped": False,
+            "width": 220,
+        }
 
 
 @admin.register(Intake)
 class IntakeAdmin(ModelAdmin, SimpleHistoryAdmin):
     search_fields = ("course__title",)
+    autocomplete_fields = ("course",)
+    list_display = (
+        "display_name",
+        "display_certificates",
+        "display_course",
+        "start_date",
+        "end_date",
+        "created_at",
+        "updated_at",
+    )
+    list_filter = (
+        ("course", AutocompleteSelectFilter),
+        ("start_date", RangeDateFilter),
+        ("end_date", RangeDateFilter),
+    )
+    list_filter_submit = True
+
+    @admin.display(
+        description="Name",
+    )
+    def display_name(self, obj: Intake):
+        return str(obj)
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("course")
+            .prefetch_related("certificates")
+            .annotate(certificate_count=Count("certificates", distinct=True))
+        )
+
+    @display(
+        description=_("Intakes"),  # type: ignore[arg-type]
+        ordering="intake_count",
+        dropdown=True,
+    )
+    def display_certificates(self, obj: Intake):
+        items = [
+            {
+                "title": f"{certificate.first_name} {certificate.last_name}",
+                "link": reverse("admin:course_certificate_change", args=(certificate.id,)),
+            }
+            for certificate in obj.certificates.all()
+        ]
+        count = len(items)
+
+        return {
+            "title": count if count else "-",
+            "items": items,
+            "striped": False,
+        }
+
+    @display(
+        description=_("Course"),
+        ordering="course__title",
+    )
+    def display_course(self, obj: Intake):
+        return a(
+            obj.course.title,
+            href=reverse("admin:course_course_change", args=(obj.course.id,)),
+            target=Target.SELF,
+        )
 
 
 @admin.register(Certificate)
@@ -62,6 +158,8 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     list_filter = (
         ["intake__course", AutocompleteSelectFilter],
         ["intake", AutocompleteSelectFilter],
+        ("intake__start_date", RangeDateFilter),
+        ("intake__end_date", RangeDateFilter),
     )
     list_filter_submit = True
     search_fields = ("first_name", "last_name", "intake__course__title")
@@ -125,8 +223,12 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
         return CertificateRenderTask.Status(obj.latest_task_status).label
 
     @admin.display(description="Course", ordering="intake__course__title")
-    def intake__course(self, obj):
-        return obj.intake.course
+    def intake__course(self, obj: Certificate):
+        return a(
+            obj.intake.course.title,
+            href=reverse("admin:course_course_change", args=(obj.intake.course.id,)),
+            target=Target.SELF,
+        )
 
     @admin.display(description="Start date", ordering="intake__start_date")
     def intake__start_date(self, obj):
