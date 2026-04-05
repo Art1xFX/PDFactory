@@ -154,6 +154,16 @@ UNFOLD = {
     "SITE_HEADER": "PDFactory",
     "SITE_URL": "/",
     "SITE_SYMBOL": "docs",
+    "SITE_DROPDOWN": [
+        {
+            "icon": "commit",
+            "title": _("Source code"),
+            "link": "https://github.com/Art1xFX/PDFactory",
+            "attrs": {
+                "target": "_blank",
+            },
+        },
+    ],
     "SIDEBAR": {
         "show_search": True,
         "command_search": True,
