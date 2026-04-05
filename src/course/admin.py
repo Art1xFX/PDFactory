@@ -1,4 +1,6 @@
+from tempfile import NamedTemporaryFile
 from uuid import UUID
+from zipfile import ZIP_DEFLATED, ZipFile
 
 from django.contrib import admin, messages
 from django.db.models import Count, OuterRef, Subquery, Value
@@ -7,6 +9,7 @@ from django.http import FileResponse, HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportMixin
 from simple_history.admin import SimpleHistoryAdmin
@@ -166,6 +169,7 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     )
     list_filter_submit = True
     search_fields = ("first_name", "last_name", "intake__course__title")
+    actions = ["download_selected_action"]
     actions_row = ["regenerate_row_action", "download_row_action"]
 
     resource_classes = [CertificateResource]
@@ -240,6 +244,43 @@ class CertificateAdmin(ModelAdmin, ImportMixin, SimpleHistoryAdmin):
     @admin.display(description="End date", ordering="intake__end_date")
     def intake__end_date(self, obj):
         return obj.intake.end_date
+
+    @admin.action(
+        description=_("Download selected %(verbose_name_plural)s"),
+    )
+    def download_selected_action(self, request: HttpRequest, queryset) -> FileResponse:
+        tmp = NamedTemporaryFile(mode="w+b", suffix=".zip")
+
+        with ZipFile(tmp, "w", compression=ZIP_DEFLATED) as archive:
+            for certificate in queryset.select_related("intake__course"):
+                if not certificate.file or not certificate.file.name:
+                    continue
+
+                filename = (
+                    CertificateFileNameBuilder(certificate)
+                    .add_course_title()
+                    .add_separator()
+                    .add_intake_start_date()
+                    .add_separator()
+                    .add_intake_end_date()
+                    .add_separator()
+                    .add_first_name()
+                    .add_separator()
+                    .add_last_name()
+                    .build()
+                )
+
+                with certificate.file.open("rb") as file:
+                    archive.writestr(filename, file.read())
+
+        tmp.seek(0)
+
+        return FileResponse(
+            tmp,
+            as_attachment=True,
+            filename=f"certificates_{now().strftime('%Y-%m-%d_%H-%M-%S')}.zip",
+            content_type="application/zip",
+        )
 
     @action(
         icon="settings_backup_restore",
