@@ -31,21 +31,29 @@ class UserAdmin(BaseUserAdmin, GuardedModelAdmin, ModelAdmin, SimpleHistoryAdmin
 
         return get_objects_for_user(
             request.user,
-            ["user.view_user", "user.change_user", "user.delete_user"],
+            [
+                "user.view_user_personal_data",
+                "user.view_user",
+                "user.change_user_personal_data",
+                "user.change_user",
+                "user.delete_user",
+            ],
             queryset,
             any_perm=True,
             accept_global_perms=True,
         ).distinct()
 
     def has_view_permission(self, request, obj=None):
+        perms = ["user.view_user_personal_data", "user.view_user"]
+
         if obj is not None:
-            return request.user.has_perm("user.view_user", obj)
+            return any(request.user.has_perm(perm, obj) for perm in perms)
 
         return (
             super().has_view_permission(request, obj)
             or get_objects_for_user(
                 request.user,
-                ["user.view_user"],
+                perms,
                 self.model.objects.all(),
                 any_perm=True,
                 accept_global_perms=False,
@@ -53,14 +61,16 @@ class UserAdmin(BaseUserAdmin, GuardedModelAdmin, ModelAdmin, SimpleHistoryAdmin
         )
 
     def has_change_permission(self, request, obj=None):
+        perms = ["user.change_user_personal_data", "user.change_user"]
+
         if obj is not None:
-            return request.user.has_perm("user.change_user", obj)
+            return any(request.user.has_perm(perm, obj) for perm in perms)
 
         return (
             super().has_change_permission(request, obj)
             or get_objects_for_user(
                 request.user,
-                ["user.change_user"],
+                perms,
                 self.model.objects.all(),
                 any_perm=True,
                 accept_global_perms=False,
