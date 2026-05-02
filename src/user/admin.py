@@ -3,10 +3,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
 from guardian.shortcuts import get_objects_for_user
-from simple_history.admin import SimpleHistoryAdmin
+from simple_history.admin import PermissionDenied, SimpleHistoryAdmin
 from unfold.admin import (
     ModelAdmin,
 )
@@ -23,6 +24,7 @@ class UserAdmin(BaseUserAdmin, GuardedModelAdmin, ModelAdmin, SimpleHistoryAdmin
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
+    change_form_template: str = "admin/user/model/change_form.html"
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -93,6 +95,24 @@ class UserAdmin(BaseUserAdmin, GuardedModelAdmin, ModelAdmin, SimpleHistoryAdmin
             ).exists()
         )
 
+    def obj_perms_manage_view(self, request, object_pk):
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+
+        return super().obj_perms_manage_view(request, object_pk)
+
+    def obj_perms_manage_user_view(self, request, object_pk, user_id):
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+
+        return super().obj_perms_manage_user_view(request, object_pk, user_id)
+
+    def obj_perms_manage_group_view(self, request, object_pk, group_id):
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+
+        return super().obj_perms_manage_group_view(request, object_pk, group_id)
+
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
         perms = ["user.view_user", "user.change_user"]
@@ -118,6 +138,20 @@ class UserAdmin(BaseUserAdmin, GuardedModelAdmin, ModelAdmin, SimpleHistoryAdmin
             readonly_fields += ("username", "last_login", "date_joined")
 
         return readonly_fields
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj = get_object_or_404(self.model, pk=object_id)
+
+        extra_context = extra_context or {}
+        extra_context["show_history"] = self.has_view_history_or_change_history_permission(request, obj)
+        extra_context["show_object_permissions"] = request.user.is_superuser
+
+        return super().change_view(
+            request,
+            object_id,
+            form_url=form_url,
+            extra_context=extra_context,
+        )
 
 
 @admin.register(Group)
