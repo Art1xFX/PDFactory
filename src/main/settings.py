@@ -225,7 +225,7 @@ UNFOLD = {
                     {
                         "title": _("Users"),
                         "icon": "account_circle",
-                        "link": reverse_lazy("admin:auth_user_changelist"),
+                        "link": reverse_lazy("admin:user_user_changelist"),
                     },
                     {
                         "title": _("Groups"),
