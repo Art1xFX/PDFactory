@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "simple_history",
     "import_export",
     "shared.apps.SharedConfig",
+    "user.apps.UserConfig",
     "file.apps.FileConfig",
     "cert.apps.CertConfig",
     "course.apps.CourseConfig",
@@ -218,9 +219,20 @@ UNFOLD = {
                 ],
             },
             {
-                "title": _("Users"),
+                "title": _("Users and groups"),
                 "separator": True,
-                "items": [],
+                "items": [
+                    {
+                        "title": _("Users"),
+                        "icon": "account_circle",
+                        "link": reverse_lazy("admin:auth_user_changelist"),
+                    },
+                    {
+                        "title": _("Groups"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
             },
         ],
     },
@@ -229,6 +241,7 @@ UNFOLD = {
 
 # endregion Unfold
 
+AUTH_USER_MODEL = "user.User"
 
 # region Dynaconf settings
 # Read more at https://www.dynaconf.com/django/
