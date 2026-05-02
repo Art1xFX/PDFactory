@@ -434,6 +434,21 @@ dramatiq = ">=1.11"
 dev = ["flake8", "flake8-quotes", "isort", "pytest", "pytest-cov", "pytest-django", "twine"]
 
 [[package]]
+name = "django-guardian"
+version = "3.3.1"
+description = "Per object permissions for Django"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_guardian-3.3.1-py3-none-any.whl", hash = "sha256:2a3a4b94cdc7e8fc99b74eef163db69d17703dc397c3e9085c7231f2b2bcf431"},
+    {file = "django_guardian-3.3.1.tar.gz", hash = "sha256:7a50eada72161e355a9dbf9fe0838855c0ec851dd9b39f4f16e2decb5f4c7988"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+
+[[package]]
 name = "django-import-export"
 version = "4.3.14"
 description = "Django application and library for importing and exporting data with included admin integration."
@@ -1701,4 +1716,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "08c9181d53e82935d21cad9505cbc258ed423aba7328b7abc45df8efe6fcded8"
+content-hash = "1a5c77d55ed80ae185cc33b9c4555467bbaca8d2f1fff5e6f36342750505effd"

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.forms",
     "unfold.contrib.filters",
+    "unfold.contrib.guardian",
     "unfold.contrib.simple_history",
     "unfold.contrib.import_export",
     "django.contrib.admin",
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.postgres",
+    "guardian",
     "simple_history",
     "import_export",
     "shared.apps.SharedConfig",
@@ -101,9 +103,18 @@ DATABASES = {
 # endregion Database
 
 
-# region Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+# region Security
 
+# https://docs.djangoproject.com/en/6.0/topics/auth/customizing/#substituting-a-custom-user-model
+AUTH_USER_MODEL = "user.User"
+
+# https://django-guardian.readthedocs.io/en/stable/configuration/
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
+)
+
+# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -119,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# endregion Password validation
+# endregion Security
 
 
 # region Internationalization
@@ -241,7 +252,6 @@ UNFOLD = {
 
 # endregion Unfold
 
-AUTH_USER_MODEL = "user.User"
 
 # region Dynaconf settings
 # Read more at https://www.dynaconf.com/django/
