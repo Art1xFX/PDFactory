@@ -23,5 +23,5 @@ class UserAdmin(BaseUserAdmin, ModelAdmin, SimpleHistoryAdmin):
 
 
 @admin.register(Group)
-class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+class GroupAdmin(BaseGroupAdmin, ModelAdmin, SimpleHistoryAdmin):
     pass
