@@ -4,7 +4,7 @@ from simple_history.models import HistoricalRecords
 
 
 class User(AbstractUser):
-    history = HistoricalRecords()
+    history = HistoricalRecords(m2m_fields=["user_permissions", "groups"])
 
     class Meta:
         permissions = [
