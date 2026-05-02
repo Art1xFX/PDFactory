@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import (
     ModelAdmin,
 )
@@ -15,7 +16,7 @@ admin.site.unregister(Group)
 
 
 @admin.register(User)
-class UserAdmin(BaseUserAdmin, ModelAdmin):
+class UserAdmin(BaseUserAdmin, ModelAdmin, SimpleHistoryAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
