@@ -97,8 +97,8 @@ class IntakeAdmin(ModelAdmin, SimpleHistoryAdmin):
         )
 
     @display(
-        description=_("Intakes"),  # type: ignore[arg-type]
-        ordering="intake_count",
+        description=_("Certificates"),  # type: ignore[arg-type]
+        ordering="certificate_count",
         dropdown=True,
     )
     def display_certificates(self, obj: Intake):
