@@ -14,7 +14,7 @@ from importlib import import_module
 from pathlib import Path
 
 from main.utils import gettext_lazy as _
-from main.utils import reverse_lazy
+from main.utils import has_view_user_permission, reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -239,11 +239,13 @@ UNFOLD = {
                         "title": _("Users"),
                         "icon": "account_circle",
                         "link": reverse_lazy("admin:user_user_changelist"),
+                        "permission": has_view_user_permission,
                     },
                     {
                         "title": _("Groups"),
                         "icon": "group",
                         "link": reverse_lazy("admin:auth_group_changelist"),
+                        "permission": lambda request: request.user.has_perm("auth.view_group"),
                     },
                 ],
             },
