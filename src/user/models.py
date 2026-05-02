@@ -13,4 +13,4 @@ class User(AbstractUser):
         ]
 
 
-register(Group, app=__package__)
+register(Group, app=__package__, m2m_fields=["permissions"])
