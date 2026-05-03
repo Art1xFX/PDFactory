@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+from datetime import timedelta
 from importlib import import_module
 from pathlib import Path
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.postgres",
+    "axes",
     "guardian",
     "simple_history",
     "import_export",
@@ -68,6 +70,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -110,6 +113,7 @@ AUTH_USER_MODEL = "user.User"
 
 # https://django-guardian.readthedocs.io/en/stable/configuration/
 AUTHENTICATION_BACKENDS = (
+    "axes.backends.AxesStandaloneBackend",
     "django.contrib.auth.backends.ModelBackend",
     "guardian.backends.ObjectPermissionBackend",
 )
@@ -131,6 +135,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
+
+# region Axes
+# https://django-axes.readthedocs.io/en/latest/4_configuration.html
+
+AXES_FAILURE_LIMIT = 5
+
+AXES_COOLOFF_TIME = timedelta(minutes=60)
+
+AXES_IPWARE_META_PRECEDENCE_ORDER = [
+    "HTTP_X_FORWARDED_FOR",
+    "REMOTE_ADDR",
+]
+
+# endregion Axes
 
 # endregion Security
 
