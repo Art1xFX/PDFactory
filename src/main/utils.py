@@ -35,3 +35,14 @@ def reverse_lazy(viewname, query=None):
         },
         formatter=_format_link,
     )
+
+
+def has_view_user_permission(request):
+    from guardian.shortcuts import get_objects_for_user  # pylint: disable=import-outside-toplevel
+
+    return get_objects_for_user(
+        request.user,
+        ["user.view_user_personal_data", "user.view_user"],
+        any_perm=True,
+        accept_global_perms=True,
+    ).exists()

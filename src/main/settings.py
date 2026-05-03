@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+from datetime import timedelta
 from importlib import import_module
 from pathlib import Path
 
 from main.utils import gettext_lazy as _
-from main.utils import reverse_lazy
+from main.utils import has_view_user_permission, reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.forms",
     "unfold.contrib.filters",
+    "unfold.contrib.guardian",
     "unfold.contrib.simple_history",
     "unfold.contrib.import_export",
     "django.contrib.admin",
@@ -48,9 +50,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.postgres",
+    "axes",
+    "guardian",
     "simple_history",
     "import_export",
     "shared.apps.SharedConfig",
+    "user.apps.UserConfig",
     "file.apps.FileConfig",
     "cert.apps.CertConfig",
     "course.apps.CourseConfig",
@@ -65,6 +70,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -100,9 +106,19 @@ DATABASES = {
 # endregion Database
 
 
-# region Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+# region Security
 
+# https://docs.djangoproject.com/en/6.0/topics/auth/customizing/#substituting-a-custom-user-model
+AUTH_USER_MODEL = "user.User"
+
+# https://django-guardian.readthedocs.io/en/stable/configuration/
+AUTHENTICATION_BACKENDS = (
+    "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
+)
+
+# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -118,7 +134,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# endregion Password validation
+SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
+
+# region Axes
+# https://django-axes.readthedocs.io/en/latest/4_configuration.html
+
+AXES_FAILURE_LIMIT = 5
+
+AXES_COOLOFF_TIME = timedelta(minutes=60)
+
+AXES_IPWARE_META_PRECEDENCE_ORDER = [
+    "HTTP_X_FORWARDED_FOR",
+    "REMOTE_ADDR",
+]
+
+# endregion Axes
+
+# endregion Security
 
 
 # region Internationalization
@@ -218,9 +250,22 @@ UNFOLD = {
                 ],
             },
             {
-                "title": _("Users"),
+                "title": _("Users and groups"),
                 "separator": True,
-                "items": [],
+                "items": [
+                    {
+                        "title": _("Users"),
+                        "icon": "account_circle",
+                        "link": reverse_lazy("admin:user_user_changelist"),
+                        "permission": has_view_user_permission,
+                    },
+                    {
+                        "title": _("Groups"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                        "permission": lambda request: request.user.has_perm("auth.view_group"),
+                    },
+                ],
             },
         ],
     },

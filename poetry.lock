@@ -415,6 +415,26 @@ argon2 = ["argon2-cffi (>=23.1.0)"]
 bcrypt = ["bcrypt (>=4.1.1)"]
 
 [[package]]
+name = "django-axes"
+version = "8.3.1"
+description = "Keep track of failed login attempts in Django-powered sites."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_axes-8.3.1-py3-none-any.whl", hash = "sha256:f7887582fd12713064f1602091ff6152752becae5e891a15bf802746cab0f51a"},
+    {file = "django_axes-8.3.1.tar.gz", hash = "sha256:d57e923c0ba33cf45275253dd1313c3a3ff04bec686b38d677beb2b3d43c7bcd"},
+]
+
+[package.dependencies]
+asgiref = ">=3.6.0"
+django = ">=4.2"
+django-ipware = {version = ">=3", optional = true, markers = "extra == \"ipware\""}
+
+[package.extras]
+ipware = ["django-ipware (>=3)"]
+
+[[package]]
 name = "django-dramatiq"
 version = "0.15.0"
 description = "A Django app for Dramatiq."
@@ -432,6 +452,21 @@ dramatiq = ">=1.11"
 
 [package.extras]
 dev = ["flake8", "flake8-quotes", "isort", "pytest", "pytest-cov", "pytest-django", "twine"]
+
+[[package]]
+name = "django-guardian"
+version = "3.3.1"
+description = "Per object permissions for Django"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_guardian-3.3.1-py3-none-any.whl", hash = "sha256:2a3a4b94cdc7e8fc99b74eef163db69d17703dc397c3e9085c7231f2b2bcf431"},
+    {file = "django_guardian-3.3.1.tar.gz", hash = "sha256:7a50eada72161e355a9dbf9fe0838855c0ec851dd9b39f4f16e2decb5f4c7988"},
+]
+
+[package.dependencies]
+django = ">=3.2"
 
 [[package]]
 name = "django-import-export"
@@ -460,6 +495,21 @@ tests = ["chardet (==5.2.0)", "coverage (==7.6.4)", "django-extensions (==3.2.3)
 xls = ["tablib[xls]"]
 xlsx = ["tablib[xlsx]"]
 yaml = ["tablib[yaml]"]
+
+[[package]]
+name = "django-ipware"
+version = "7.0.1"
+description = "A Django application to retrieve user's IP address"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "django-ipware-7.0.1.tar.gz", hash = "sha256:d9ec43d2bf7cdf216fed8d494a084deb5761a54860a53b2e74346a4f384cff47"},
+    {file = "django_ipware-7.0.1-py2.py3-none-any.whl", hash = "sha256:db16bbee920f661ae7f678e4270460c85850f03c6761a4eaeb489bdc91f64709"},
+]
+
+[package.dependencies]
+python-ipware = ">=2.0.3"
 
 [[package]]
 name = "django-model-utils"
@@ -1326,6 +1376,21 @@ dev = ["twine (>=3.4.1)"]
 nodejs = ["nodejs-wheel-binaries"]
 
 [[package]]
+name = "python-ipware"
+version = "3.0.0"
+description = "A Python package to retrieve user's IP address"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "python_ipware-3.0.0-py3-none-any.whl", hash = "sha256:fc936e6e7ec9fcc107f9315df40658f468ac72f739482a707181742882e36b60"},
+    {file = "python_ipware-3.0.0.tar.gz", hash = "sha256:9117b1c4dddcb5d5ca49e6a9617de2fc66aec2ef35394563ac4eecabdf58c062"},
+]
+
+[package.extras]
+dev = ["coverage[toml]", "coveralls (>=3.3,<4.0)", "ruff", "twine"]
+
+[[package]]
 name = "pyyaml"
 version = "6.0.3"
 description = "YAML parser and emitter for Python"
@@ -1701,4 +1766,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "08c9181d53e82935d21cad9505cbc258ed423aba7328b7abc45df8efe6fcded8"
+content-hash = "304fd1973bd0560f5cc5eea3f8a393e1f13100672cb57c066f2d43ee86c0929f"

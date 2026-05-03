@@ -19,6 +19,8 @@ dependencies = [
     "psycopg[binary] (>=3.3.2,<4.0.0)",
     "dramatiq[rabbitmq] (>=2.1.0,<3.0.0)",
     "django-dramatiq (>=0.15.0,<0.16.0)",
+    "django-guardian (>=3.3.1,<4.0.0)",
+    "django-axes[ipware] (>=8.3.1,<9.0.0)",
 ]
 
 

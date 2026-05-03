@@ -1,26 +1,31 @@
+from axes.admin import (
+    AccessAttemptAdmin as BaseAccessAttemptAdmin,
+)
+from axes.admin import (
+    AccessFailureLogAdmin as BaseAccessFailureLogAdmin,
+)
+from axes.admin import (
+    AccessLogAdmin as BaseAccessLogAdmin,
+)
+from axes.models import AccessAttempt, AccessFailureLog, AccessLog
 from django.contrib import admin
-from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import (
-    GroupAdmin as BaseGroupAdmin,
-)
-from django.contrib.auth.admin import (
-    UserAdmin as BaseUserAdmin,
-)
-from django.contrib.auth.models import Group
 from unfold.admin import ModelAdmin
 
-User = get_user_model()
+admin.site.unregister(AccessAttempt)
+admin.site.unregister(AccessLog)
+admin.site.unregister(AccessFailureLog)
 
 
-admin.site.unregister(User)
-admin.site.unregister(Group)
-
-
-@admin.register(User)
-class UserAdmin(BaseUserAdmin, ModelAdmin):
+@admin.register(AccessAttempt)
+class AccessAttemptAdmin(BaseAccessAttemptAdmin, ModelAdmin):
     pass
 
 
-@admin.register(Group)
-class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+@admin.register(AccessLog)
+class AccessLogAdmin(BaseAccessLogAdmin, ModelAdmin):
+    pass
+
+
+@admin.register(AccessFailureLog)
+class AccessFailureLogAdmin(BaseAccessFailureLogAdmin, ModelAdmin):
     pass
